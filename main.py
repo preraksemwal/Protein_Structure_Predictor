@@ -50,6 +50,9 @@ beta_propensity = {
     "P" : 0.62
 }
 
+prediction = []    # stores the final structure predicted
+
 
 if __name__ == '__main__':
-    pass
+    
+    prediction = [" "] * len(protein_sequence)
