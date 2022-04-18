@@ -182,8 +182,6 @@ if __name__ == '__main__':
                 found_alphas[j] = "H"
             expand(i, i+5)
 
-
-
     # detecting for beta-strand
     for i in range(0, len(protein_sequence) - 4):
         seq = protein_sequence[i : i+5]
@@ -193,10 +191,14 @@ if __name__ == '__main__':
             expand(i, i+5)
 
 
-    for i in range(0, len(protein_sequence)):
+    for i in range(0, len(prediction)):
         if found_alphas[i] == "H" and found_betas[i] == " ":
             prediction[i] = "H"
-        else if found_alphas[i] == " " and found_betas[i] == "S":
+        elif found_alphas[i] == " " and found_betas[i] == "S":
             prediction[i] = "S"
         else:
             pass
+
+    print("Structure Prediction as Per Chou-Fasman :  ", end = "")
+    for e in prediction:
+        print(e , end = "")
