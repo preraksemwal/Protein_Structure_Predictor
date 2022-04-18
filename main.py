@@ -140,7 +140,7 @@ def isBetaCandidate(seq):  # 'seq' is sequence of length 5 and check if its a co
         return False
 
 
-def expand(i,j):
+def expand(i, j):
     if j-i+1 == 6:     # ALPHA HELIX - CASE
         # expand leftwards
         ptr1 = i-1
