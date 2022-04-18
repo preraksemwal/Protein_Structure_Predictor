@@ -99,39 +99,71 @@ beta_propensity = {
 ##########################################################
 
 
-
 prediction   = []    # stores the final structure predicted
-found_alphas = []
-found_betas  = []
+found_alphas = []    # stores info of each amino acid about whether ALPHA-helix possible or not
+found_betas  = []    # stores info of each amino acid about whether BETA-strand possible or not
 
 
 def isAlphaCandidate(seq):  # 'seq' is sequence of length 6 and check if its a contender for alpha-helical structure
-    count = 0
-    for e in seq:
-        if alpha_propensity[e] >= 1:
-            count += 1
-    if count >= 4 :
-        print(seq , " " , "selected")
-        return True
-    return False
+    if len(seq) == 4:   # during expansion of a selected sequence
+        score = 0
+        for e in seq:
+            score += alpha_propensity[e]
+        if score >= 4:
+            return True
+        return False
+    else:
+        count = 0
+        for e in seq:
+            if alpha_propensity[e] >= 1:
+                count += 1
+        if count >= 4 :
+            return True
+        return False
 
 def isBetaCandidate(seq):  # 'seq' is sequence of length 5 and check if its a contender for beta-helical structure
-    count = 0
-    for e in seq:
-        if beta_propensity[e] > 1:
-            count += 1
-    if count >= 3:
-        print(seq , " " , "selected")
-        return True
-    return False
+    if len(seq) == 4:   # during expansion of a selected sequence
+        score = 0
+        for e in seq:
+            score += beta_propensity[e]
+        if score > 4:
+            return True
+        return False
+    else:
+        count = 0
+        for e in seq:
+            if beta_propensity[e] > 1:
+                count += 1
+        if count >= 3:
+            return True
+        return False
 
 def expand(i,j):
-    if(j-i+1 == 6):     # alpha_helix case
-        pass
+    if j-i+1 == 6:     # ALPHA HELIX - CASE
         # expand leftwards
+        ptr1 = i-1
+        while ptr1 >=0 and isAlphaCandidate(protein_sequence[ptr1 : ptr1+4]):
+            found_alphas[ptr1] = "H"
+            ptr1 -= 1
+
+        # expand rightwards
+        ptr2 = j+1
+        while ptr2 <= len(protein_sequence)-1 and isAlphaCandidate  (protein_sequence[ptr2-3 : ptr2+1]):
+            found_alphas[ptr2] = "H"
+            ptr2 += 1
         
-    else:
-        pass
+    else:               # BETA STRAND - CASE
+        # expand leftwards
+        ptr1 = i-1
+        while ptr1 >=0 and isBetaCandidate(protein_sequence[ptr1 : ptr1+4]):
+            found_betas[ptr1] = "S"
+            ptr1 -= 1
+
+        # expand rightwards
+        ptr2 = j+1
+        while ptr2 <= len(protein_sequence)-1 and isBetaCandidate(protein_sequence[ptr2-3 : ptr2+1]):
+            found_betas[ptr2] = "S"
+            ptr2 += 1
     
 
 
@@ -150,9 +182,6 @@ if __name__ == '__main__':
                 found_alphas[j] = "H"
             expand(i, i+5)
 
-    print(found_alphas)
-    
-
 
 
     # detecting for beta-strand
@@ -160,6 +189,14 @@ if __name__ == '__main__':
         seq = protein_sequence[i : i+5]
         if isBetaCandidate(seq):
             for j in range(i, i+5):
-                found_betas[j] = "E"
-            # expand(i, i+5)
+                found_betas[j] = "S"
+            expand(i, i+5)
 
+
+    for i in range(0, len(protein_sequence)):
+        if found_alphas[i] == "H" and found_betas[i] == " ":
+            prediction[i] = "H"
+        else if found_alphas[i] == " " and found_betas[i] == "S":
+            prediction[i] = "S"
+        else:
+            pass
