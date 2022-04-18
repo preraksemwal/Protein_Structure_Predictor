@@ -121,6 +121,7 @@ def isAlphaCandidate(seq):  # 'seq' is sequence of length 6 and check if its a c
             return True
         return False
 
+
 def isBetaCandidate(seq):  # 'seq' is sequence of length 5 and check if its a contender for beta-helical structure
     if len(seq) == 4:   # during expansion of a selected sequence
         score = 0
@@ -138,6 +139,7 @@ def isBetaCandidate(seq):  # 'seq' is sequence of length 5 and check if its a co
             return True
         return False
 
+
 def expand(i,j):
     if j-i+1 == 6:     # ALPHA HELIX - CASE
         # expand leftwards
@@ -145,7 +147,6 @@ def expand(i,j):
         while ptr1 >=0 and isAlphaCandidate(protein_sequence[ptr1 : ptr1+4]):
             found_alphas[ptr1] = "H"
             ptr1 -= 1
-
         # expand rightwards
         ptr2 = j+1
         while ptr2 <= len(protein_sequence)-1 and isAlphaCandidate  (protein_sequence[ptr2-3 : ptr2+1]):
@@ -158,7 +159,6 @@ def expand(i,j):
         while ptr1 >=0 and isBetaCandidate(protein_sequence[ptr1 : ptr1+4]):
             found_betas[ptr1] = "S"
             ptr1 -= 1
-
         # expand rightwards
         ptr2 = j+1
         while ptr2 <= len(protein_sequence)-1 and isBetaCandidate(protein_sequence[ptr2-3 : ptr2+1]):
@@ -192,33 +192,34 @@ if __name__ == '__main__':
 
     i = 0
     while i < len(prediction):
+
         if found_alphas[i] == "H" and found_betas[i] == " ":
             prediction[i] = "H"
             i += 1
+        
         elif found_alphas[i] == " " and found_betas[i] == "S":
             prediction[i] = "S"
             i += 1
+        
         else:
             upto = i
-            while upto < len(prediction)-1 and found_alphas[upto] == "H" and found_betas[upto] == "S":
+            while upto < len(prediction) and found_alphas[upto] == "H" and found_betas[upto] == "S":
                 upto += 1
-            if upto > i:    # if upto is != 1 , then upto-th index WON'T have a conflict
-                upto -= 1
+            upto -= 1       # as upto-th index WON'T have a conflict
+
             alpha_score, beta_score = 0, 0
             for e in protein_sequence[i : upto+1]:
                 alpha_score += alpha_propensity[e]
                 beta_score += beta_propensity[e]
 
-            if alpha_score > beta_score:
+            if alpha_score > beta_score:        # alpha-helix wins conflict
                 for j in range(i, upto + 1):
                     prediction[j] = "H"
-            else:
+            else:                               # beta-strand wins conflict
                 for j in range(i, upto + 1):
                     prediction[j] = "S"
-            if upto == i:
-                i += 1
-            else:
-                i = upto
+            
+            i = upto + 1
 
 
     print("Structure Prediction as Per Chou-Fasman :  ", end = "")
