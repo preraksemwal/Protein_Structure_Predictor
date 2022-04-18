@@ -190,14 +190,36 @@ if __name__ == '__main__':
                 found_betas[j] = "S"
             expand(i, i+5)
 
-
-    for i in range(0, len(prediction)):
+    i = 0
+    while i < len(prediction):
         if found_alphas[i] == "H" and found_betas[i] == " ":
             prediction[i] = "H"
+            i += 1
         elif found_alphas[i] == " " and found_betas[i] == "S":
             prediction[i] = "S"
+            i += 1
         else:
-            pass
+            upto = i
+            while upto < len(prediction)-1 and found_alphas[upto] == "H" and found_betas[upto] == "S":
+                upto += 1
+            if upto > i:    # if upto is != 1 , then upto-th index WON'T have a conflict
+                upto -= 1
+            alpha_score, beta_score = 0, 0
+            for e in protein_sequence[i : upto+1]:
+                alpha_score += alpha_propensity[e]
+                beta_score += beta_propensity[e]
+
+            if alpha_score > beta_score:
+                for j in range(i, upto + 1):
+                    prediction[j] = "H"
+            else:
+                for j in range(i, upto + 1):
+                    prediction[j] = "S"
+            if upto == i:
+                i += 1
+            else:
+                i = upto
+
 
     print("Structure Prediction as Per Chou-Fasman :  ", end = "")
     for e in prediction:
