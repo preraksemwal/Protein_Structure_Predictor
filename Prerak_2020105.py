@@ -191,7 +191,7 @@ if __name__ == '__main__':
 
 
             
-    print("Structure Prediction as Per Chou-Fasman : ")
+    print("Structure Prediction as Per Chou-Fasman : \n")
+    print(protein_sequence)
     for e in prediction:
         print(e , end = "")
-
