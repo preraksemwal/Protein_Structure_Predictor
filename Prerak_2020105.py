@@ -81,13 +81,13 @@ def isBetaCandidate(seq):  # 'seq' is sequence of length 5 or 4 and check if its
         score = 0
         for e in seq:
             score += beta_propensity[e]
-        if score > 4:
+        if score >= 4:
             return True
         return False
     else:               # for a sequence of length = 5 ; if it returns true then we will 'expand' in future using the above if-block
         count = 0
         for e in seq:
-            if beta_propensity[e] > 1:
+            if beta_propensity[e] >= 1:
                 count += 1
         if count >= 3:
             return True
@@ -247,4 +247,3 @@ if __name__ == '__main__':
 #     "P" : 0.62
 # }
 ##########################################################
-
