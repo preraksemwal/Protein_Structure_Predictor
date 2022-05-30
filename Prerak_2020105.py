@@ -59,14 +59,14 @@ found_betas  = []    # stores info of each amino acid about whether BETA-strand 
 
 
 def isAlphaCandidate(seq):  # 'seq' is sequence of length 6 or 4 and check if its a contender/part for alpha-helical structure
-    if len(seq) == 4:   # during expansion of a selected sequence (of length >= 6)
+    if len(seq) == 4:       # during expansion of a selected sequence (of length >= 6)
         score = 0
         for e in seq:
             score += alpha_propensity[e]
         if score >= 4:
             return True
         return False
-    else:               # for a sequence of length = 6 ; if it returns true then we will 'expand' in future using the above if-block
+    else:                  # for a sequence of length = 6 ; if it returns true then we will 'expand' in future using the above if-block
         count = 0
         for e in seq:
             if alpha_propensity[e] >= 1:
@@ -77,14 +77,14 @@ def isAlphaCandidate(seq):  # 'seq' is sequence of length 6 or 4 and check if it
 
 
 def isBetaCandidate(seq):  # 'seq' is sequence of length 5 or 4 and check if its a contender/part for beta-helical structure
-    if len(seq) == 4:   # during expansion of a selected sequence (of length >= 5)
+    if len(seq) == 4:      # during expansion of a selected sequence (of length >= 5)
         score = 0
         for e in seq:
             score += beta_propensity[e]
         if score >= 4:
             return True
         return False
-    else:               # for a sequence of length = 5 ; if it returns true then we will 'expand' in future using the above if-block
+    else:                  # for a sequence of length = 5 ; if it returns true then we will 'expand' in future using the above if-block
         count = 0
         for e in seq:
             if beta_propensity[e] >= 1:
@@ -95,7 +95,7 @@ def isBetaCandidate(seq):  # 'seq' is sequence of length 5 or 4 and check if its
 
 
 
-def expand(i, j):   # once we select a sequence of length 5 or 6 for beta-strand or alpha-helix repectively we expand both directions
+def expand(i, j):      # once we select a sequence of length 5 or 6 for beta-strand or alpha-helix repectively we expand both directions
     
     if j-i+1 == 6:     # ALPHA HELIX - CASE
         
@@ -112,7 +112,7 @@ def expand(i, j):   # once we select a sequence of length 5 or 6 for beta-strand
             ptr2 += 1
         
 
-    else:               # BETA STRAND - CASE
+    else:             # BETA STRAND - CASE
         
         # expand leftwards
         ptr1 = i-1
@@ -173,7 +173,7 @@ if __name__ == '__main__':
             upto = i
             while upto < len(prediction) and found_alphas[upto] == "H" and found_betas[upto] == "S":
                 upto += 1
-            upto -= 1       # as upto-th index WON'T have a conflict
+            upto -= 1                                               # as upto-th index WON'T have a conflict
 
             alpha_score, beta_score = 0, 0
             for e in protein_sequence[i : upto+1]:
@@ -192,8 +192,6 @@ if __name__ == '__main__':
 
             
     print("Structure Prediction as Per Chou-Fasman : \n")
-    # print("Comparing Chou-Fasman Vs. STRIDE: \n")
     print(protein_sequence)
     for e in prediction:
         print(e , end = "")
-    # print("\nTTTT     HHHHHH EEEEEETTEEEEEEEETTEEEEEGGGG  HHHHH   HHHHHHH  GGG EEEETTEEE EEEEEEETTEEEEEE   TTTT        TTTEEEEEEEEETTEEEEEEEEEETTTT B    TTTTTTTEE ")
