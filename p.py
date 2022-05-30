@@ -1,4 +1,5 @@
 # AUTHOR            :  Prerak Semwal
+# Course name       :  Introduction to Quantitative Biology
 # Course Instructor :  Prof. Jaspreet Kaur Dhanjal
 
 # target protein sequence
